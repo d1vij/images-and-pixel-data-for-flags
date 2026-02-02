@@ -1,5 +1,7 @@
 Scrapped flags from [https://r74n.com/pixelflags/](https://r74n.com/pixelflags/), along with their RGB and CIELAB pixel arrays
 
+All the data can be downloaded from [data.zip](https://github.com/d1vij/images-and-pixel-data-for-flags/releases/download/v1.0.0/data.zip)
+
 ## Structure
 
 ```json
