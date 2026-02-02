@@ -4,7 +4,7 @@ All the data can be downloaded from [data.zip](https://github.com/d1vij/images-a
 
 ## Structure
 
-```json
+```
 data
 ├── catagories              // Files with arrays of flags grouped by catagory
 │   ├── list.json           // Array of catagory names
