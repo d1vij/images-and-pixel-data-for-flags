@@ -2,7 +2,7 @@ Scrapped flags from [https://r74n.com/pixelflags/](https://r74n.com/pixelflags/)
 
 ## Structure
 
-```json
+```
 data
 ├── catagories              // Files with arrays of flags grouped by catagory
 │   ├── list.json           // Array of catagory names
