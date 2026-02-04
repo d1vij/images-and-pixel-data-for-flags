@@ -1,4 +1,5 @@
 /** biome-ignore-all lint/correctness/noUnusedVariables: (˶˃ ᵕ ˂˶) .ᐟ.ᐟ */
+/** biome-ignore-all lint/style/noNonNullAssertion: <explanation> */
 import { read } from "image-js";
 import fs from "node:fs/promises";
 import path from "path";
@@ -15,6 +16,7 @@ const FLAG_PIXEL_DATA = path.join(DATA_DIR, "flags/all_flags_rgba.json");
 const FLAG_URLS = path.join(DATA_DIR, "flags/flag_urls.json");
 const RGB_FLAG_DATA = path.join(DATA_DIR, "flags/rgb");
 const LAB_FLAG_DATA = path.join(DATA_DIR, "flags/lab");
+const HEX_FLAG_DATA = path.join(DATA_DIR, "flags/hex");
 const FLAG_IMAGES = path.join(DATA_DIR, "flags/images");
 
 const FLAG_DIMENSIONS = {
@@ -211,6 +213,43 @@ async function generateFlagReadme() {
     await Bun.write("README.md", [header, ...rows].join("\n"));
 }
 
+function convertRGBAToHexString(rgbClr: RGBColorArray) {
+    const [r, g, b] = rgbClr;
+
+    return (
+        "#" +
+        [r, g, b]
+            .map((v) => v.toString(16).padStart(2, "0"))
+            .join("")
+            .toUpperCase()
+    );
+}
+
+async function convertRgbToHex() {
+    const files = await fs.readdir(RGB_FLAG_DATA);
+    for (const file of files) {
+        const content: Record<string, ImagePixelData> = await Bun.file(
+            path.join(RGB_FLAG_DATA, file),
+        ).json();
+        const newc: Record<string, string[]> = {};
+
+        for (const flag in content) {
+            const source = content[flag]!;
+            const dest = [];
+            for (const pixel of source) {
+                dest.push(convertRGBAToHexString(pixel));
+            }
+
+            newc[flag] = dest;
+        }
+
+        await Bun.write(
+            path.join(HEX_FLAG_DATA, file),
+            JSON.stringify(newc, null, 4),
+        );
+    }
+}
+
 async function main() {
     // await fetchPage()
     // await parseUrls()
@@ -218,7 +257,7 @@ async function main() {
     // await processImages();
     // await splitCHUNGUSImageData();
     // await convertFlagDataToLab();
-    await generateFlagReadme();
+    await convertRgbToHex();
 }
 
 await main();
